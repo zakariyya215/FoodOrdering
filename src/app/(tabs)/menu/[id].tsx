@@ -1,7 +1,8 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { GestureResponderEvent, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import products from '@assets/data/products';
+import Button from '@components/Button';
 
 type SizeProp = 'S' | 'M' | 'L' | 'XL';
 
@@ -15,6 +16,10 @@ export default function ProductDetailsScreen() {
 
   if (!product) {
     return <Text>Product not Found</Text>
+  }
+
+  function addToCart(event: GestureResponderEvent): void {
+    console.warn("Adding to Cart, size:", currentSize);
   }
 
   return (
@@ -38,6 +43,7 @@ export default function ProductDetailsScreen() {
         ))}
       </View>
       <Text style={styles.price}>${product.price}</Text>
+      <Button onPress={addToCart} text={'Add to Cart'} />
     </View>
   )
 }
@@ -58,7 +64,8 @@ const styles = StyleSheet.create({
   sizes: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 10
+    marginVertical: 10,
+    flex: 1
   },
   selectedSize: {
     backgroundColor: 'gainsboro',
