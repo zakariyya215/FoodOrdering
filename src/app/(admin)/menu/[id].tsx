@@ -1,8 +1,9 @@
 import { GestureResponderEvent, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import {Stack, useLocalSearchParams, useRouter} from 'expo-router'
 import products from '@assets/data/products';
-import Button from '@components/Button';
+import { useCart } from '@/providers/CartProvider';
+import Button from "@components/Button";
 
 type SizeProp = 'S' | 'M' | 'L' | 'XL';
 
@@ -14,12 +15,20 @@ export default function ProductDetailsScreen() {
   const sizes: SizeProp[] = ['S', 'M', 'L', 'XL'];
   const [currentSize, setCurrentSize] = useState<SizeProp>('S');
 
+  const { addItem } = useCart();
+
+  const router = useRouter();
+
   if (!product) {
     return <Text>Product not Found</Text>
   }
 
-  function addToCart(event: GestureResponderEvent): void {
-    console.warn("Adding to Cart, size:", currentSize);
+  function addToCart(): void {
+    if (!product) {
+      return;
+    }
+    addItem(product, currentSize);
+    router.push('/cart');
   }
 
   return (
